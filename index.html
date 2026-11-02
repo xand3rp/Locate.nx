@@ -9,7 +9,6 @@
     <!-- Leaflet CSS -->
     <link href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" rel="stylesheet"/>
 
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
   </head>
   <body class="vh-100">
@@ -70,7 +69,23 @@
       </gmp-map> -->
     </div>
   </body>
+
+  <dialog class="dialog" id="dlg_add_loc">
+    <div class="dialog-header">
+      <h1 class="dialog-title">Tagged Location: <span id="dlg_coordinates"></span></h1>
+      <button type="button" class="btn-close" data-bs-dismiss="dialog" aria-label="Close"></button>
+    </div>
+    <div class="dialog-body">
+      
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn-solid theme-secondary" data-bs-dismiss="dialog">Close</button>
+    </div>
+  </dialog>
+
   <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+
+  <script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
 
   <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
 
@@ -78,7 +93,8 @@
 
   <script type="text/javascript">
     // OpenStreetMap x Leaflet
-    var element = document.getElementById('osm-map');
+    var element = $("#osm-map")[0];
+    // var element = document.getElementById('osm-map');
 
     var map = L.map(element);
 
@@ -124,23 +140,35 @@
         L.polyline(Object.values(pts), {color: 'red'}).addTo(map);
     }
 
+    // // Strategic area
+    // let sa_coords = [];
+
+    // for(f of opt.features)  {
+    //   for(c of f.geometry.coordinates)
+    //     sa_coords.push([c[1],c[0]]);
+    // }
+
+    // console.log(sa_coords);
+    
+    // L.polyline(sa_coords, {color: 'red'}).addTo(map);
+
+
+    // for(f of opt.features)  {
+    //   for(c of f.geometry.coordinates)  {
+    //     let temp = [[c[1]],c[0]]
+    //     L.polyline(temp, {color: 'red'}).addTo(map);
+    //   }
+    // }
+
+
     //
+    map.on('click', function(e){      
+      var dialog = $("#dlg_add_loc")[0];
 
-    function onMapClick(e) {
-      // e.latlng contains both latitude and longitude
-      var lat = e.latlng.lat;
-      var lng = e.latlng.lng;
-      
-      console.log("Latitude: " + lat + ", Longitude: " + lng);
-      
-      // Optional: Add a popup at the clicked location
-      // L.popup()
-      //   .setLatLng(e.latlng)
-      //   .setContent("You clicked at: " + lat.toFixed(5) + ", " + lng.toFixed(5))
-      //   .openOn(map);
-    }
+      $("#dlg_coordinates").text(`${e.latlng.lat}, ${e.latlng.lng}`);
 
-    map.on('click', onMapClick);
+      dialog.showModal();
+    });
 
   </script>
 </html>
