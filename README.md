@@ -1,1 +1,1 @@
-# locatex
+# Locate.nx
